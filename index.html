@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidget Spinner — Free Online Fidget Spinner | Spin & Relax</title>
+  <meta name="description" content="Free online fidget spinner. Click or tap to spin. Multiple spinner styles, spin speed tracker, satisfying animations. Works on mobile and desktop.">
+  <meta name="keywords" content="fidget spinner, online fidget spinner, virtual fidget spinner, spin fidget, stress relief, fidget toy online">
+  <link rel="canonical" href="https://fidgetspinner.quicktools.io">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Fidget Spinner","description":"Free online virtual fidget spinner","applicationCategory":"GameApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <style>
+    :root{--bg:#0f1117;--bg2:#1a1d26;--bg3:#22263a;--border:#2a2f45;--accent:#4f8ef7;--green:#10b981;--amber:#f59e0b;--purple:#8b5cf6;--red:#ef4444;--text:#e2e8f0;--text-dim:#94a3b8;--white:#f8fafc;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;user-select:none;}
+    .topnav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;}
+    .nav-logo{font-size:16px;font-weight:700;color:var(--accent);text-decoration:none;}
+    .ad-banner{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;}
+
+    .hero{text-align:center;padding:24px 16px 0;}
+    .hero h1{font-size:clamp(22px,4vw,36px);font-weight:800;color:var(--white);margin-bottom:8px;}
+    .hero p{font-size:14px;color:var(--text-dim);}
+
+    /* SPINNER ARENA */
+    .arena{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;flex:1;}
+
+    /* STATS BAR */
+    .stats-bar{display:flex;gap:24px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+    .stat{text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 20px;min-width:90px;}
+    .stat-val{font-size:24px;font-weight:800;color:var(--white);}
+    .stat-lbl{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+
+    /* THE SPINNER */
+    .spinner-wrap{position:relative;width:280px;height:280px;cursor:pointer;margin:0 auto;}
+    .spinner-wrap:active{transform:scale(.98);}
+    .spinner{width:100%;height:100%;position:absolute;top:0;left:0;}
+    .center-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:var(--bg2);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;z-index:10;transition:border-color .2s;}
+    .spinner-wrap:hover .center-btn{border-color:var(--accent);}
+    .center-btn.spinning{border-color:var(--accent);box-shadow:0 0 20px rgba(79,142,247,.5);}
+
+    /* CLICK HINT */
+    .click-hint{font-size:13px;color:var(--text-dim);margin-top:12px;text-align:center;transition:opacity .3s;}
+    .click-hint.hidden{opacity:0;}
+
+    /* SPEED METER */
+    .speed-meter{width:280px;margin:16px auto 0;background:var(--bg3);border-radius:20px;height:8px;overflow:hidden;}
+    .speed-fill{height:100%;border-radius:20px;transition:width .1s,background .3s;background:var(--green);}
+
+    /* SPIN BUTTON */
+    .spin-btn{margin:16px auto 0;display:block;padding:12px 40px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .spin-btn:hover{filter:brightness(1.1);}
+
+    /* STYLE PICKER */
+    .style-picker{display:flex;gap:10px;justify-content:center;margin:20px auto;flex-wrap:wrap;max-width:500px;}
+    .style-btn{width:44px;height:44px;border-radius:50%;border:3px solid var(--border);cursor:pointer;transition:all .15s;}
+    .style-btn:hover,.style-btn.active{border-color:var(--white);transform:scale(1.15);}
+
+    /* BOTTOM AD */
+    .ad-mid{text-align:center;margin:16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;min-height:90px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px;}
+
+    /* FAQ */
+    .faq-section{max-width:700px;margin:0 auto;padding:0 16px 32px;}
+    .faq h2{font-size:20px;font-weight:700;color:var(--white);margin-bottom:16px;}
+    .faq-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:8px;}
+    .faq-q{font-weight:600;color:var(--white);margin-bottom:6px;}
+    .faq-a{color:var(--text-dim);font-size:14px;line-height:1.6;}
+
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--text-dim);font-size:13px;}
+    footer a{color:var(--text-dim);text-decoration:none;margin:0 8px;}
+
+    /* PARTICLE */
+    .particle{position:fixed;pointer-events:none;border-radius:50%;animation:floatUp .8s ease-out forwards;}
+    @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(0)}}
+  </style>
+</head>
+<body>
+<nav class="topnav"><a href="/" class="nav-logo">⚡ QuickTools</a></nav>
+<div class="ad-banner">[Ad — 728x90]</div>
+
+<div class="hero">
+  <h1>🌀 Fidget Spinner</h1>
+  <p>Click or tap to spin. Hold to keep going. Flick for maximum speed!</p>
+</div>
+
+<div class="arena">
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val" id="rpm-val">0</div><div class="stat-lbl">RPM</div></div>
+    <div class="stat"><div class="stat-val" id="spins-val">0</div><div class="stat-lbl">Spins</div></div>
+    <div class="stat"><div class="stat-val" id="max-val">0</div><div class="stat-lbl">Max RPM</div></div>
+    <div class="stat"><div class="stat-val" id="time-val">0s</div><div class="stat-lbl">Spin Time</div></div>
+  </div>
+
+  <div class="spinner-wrap" id="spinner-wrap"
+    onmousedown="startSpin(event)" ontouchstart="startSpin(event)"
+    onclick="clickSpin()">
+    <canvas class="spinner" id="spinner-canvas" width="280" height="280"></canvas>
+    <div class="center-btn" id="center-btn">🌀</div>
+  </div>
+
+  <div class="speed-meter"><div class="speed-fill" id="speed-fill" style="width:0%"></div></div>
+
+  <p class="click-hint" id="click-hint">Click to spin!</p>
+
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+    <button class="spin-btn" onclick="boostSpin()">⚡ Boost</button>
+    <button class="spin-btn" style="background:var(--bg3);color:var(--text);border:1px solid var(--border);" onclick="resetSpinner()">↺ Reset</button>
+  </div>
+
+  <!-- STYLE PICKER -->
+  <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Spinner Style</div>
+  <div class="style-picker" id="style-picker">
+    <div class="style-btn active" style="background:linear-gradient(135deg,#4f8ef7,#8b5cf6)" onclick="setStyle(0,this)" title="Classic Blue"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#10b981,#059669)" onclick="setStyle(1,this)" title="Emerald"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="setStyle(2,this)" title="Red Hot"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#f59e0b,#c9a227)" onclick="setStyle(3,this)" title="Gold"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)" onclick="setStyle(4,this)" title="Neon Pink"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#e2e8f0,#94a3b8)" onclick="setStyle(5,this)" title="Silver Chrome"></div>
+    <div class="style-btn" style="background:conic-gradient(#f59e0b,#ef4444,#8b5cf6,#4f8ef7,#10b981,#f59e0b)" onclick="setStyle(6,this)" title="Rainbow"></div>
+    <div class="style-btn" style="background:linear-gradient(135deg,#0f1117,#374151);border-color:#4f8ef7" onclick="setStyle(7,this)" title="Stealth"></div>
+  </div>
+</div>
+
+<div class="ad-mid">[Ad — 728x90]</div>
+
+<div class="faq-section">
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">How do I make it spin faster?</div><div class="faq-a">Click or tap rapidly to add speed. Use the Boost button for maximum velocity. The faster you click, the higher the RPM. Try flicking quickly for the best results.</div></div>
+    <div class="faq-item"><div class="faq-q">Are fidget spinners good for anxiety?</div><div class="faq-a">Many people find repetitive spinning motions calming and helpful for focus. Fidget toys can help redirect nervous energy and provide sensory stimulation. While not a medical treatment, many people with ADHD or anxiety find them helpful.</div></div>
+    <div class="faq-item"><div class="faq-q">How long will it keep spinning?</div><div class="faq-a">The spinner slows down gradually using realistic friction physics, just like a real fidget spinner. Higher speeds last longer before the spin decays. A big boost can keep it going for 30+ seconds.</div></div>
+    <div class="faq-item"><div class="faq-q">Does this work on mobile?</div><div class="faq-a">Yes. Tap or swipe on the spinner to give it speed. The touch controls work on any smartphone or tablet.</div></div>
+  </div>
+</div>
+
+<footer>© 2025 QuickTools — Free Online Utilities<br><div style="margin-top:8px;"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/tools">All Tools</a></div></footer>
+
+<script>
+const canvas = document.getElementById('spinner-canvas');
+const ctx    = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height, CX = W/2, CY = H/2;
+
+// Physics
+let angle    = 0;
+let velocity = 0;       // radians per frame
+let friction = 0.995;   // decay per frame
+let spinning = false;
+let spinStart= 0;
+let totalSpins = 0;
+let maxRPM   = 0;
+let frameId  = null;
+
+// Style
+const STYLES = [
+  {arm:'#4f8ef7', hub:'#1e3a6e', ball:'#93c5fd', glow:'rgba(79,142,247,.4)'},
+  {arm:'#10b981', hub:'#064e3b', ball:'#6ee7b7', glow:'rgba(16,185,129,.4)'},
+  {arm:'#ef4444', hub:'#7f1d1d', ball:'#fca5a5', glow:'rgba(239,68,68,.4)'},
+  {arm:'#c9a227', hub:'#451a03', ball:'#fde68a', glow:'rgba(201,162,39,.4)'},
+  {arm:'#ec4899', hub:'#500724', ball:'#f9a8d4', glow:'rgba(236,72,153,.4)'},
+  {arm:'#94a3b8', hub:'#1e293b', ball:'#e2e8f0', glow:'rgba(148,163,184,.4)'},
+  {arm:'rainbow', hub:'#111', ball:'#fff',        glow:'rgba(255,255,255,.3)'},
+  {arm:'#374151', hub:'#030712', ball:'#4f8ef7',  glow:'rgba(79,142,247,.2)'},
+];
+let styleIdx = 0;
+
+function setStyle(idx, btn) {
+  styleIdx = idx;
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function drawSpinner() {
+  ctx.clearRect(0, 0, W, H);
+  const s = STYLES[styleIdx];
+  const R = 90, r = 28, hubR = 22;
+  const ARMS = 3;
+
+  // Glow
+  if (velocity > 0.02) {
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, velocity * 8);
+    const grd = ctx.createRadialGradient(CX,CY,hubR,CX,CY,R+r);
+    grd.addColorStop(0, s.glow);
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.beginPath(); ctx.arc(CX,CY,R+r,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  // Draw 3 arms + balls
+  for (let i = 0; i < ARMS; i++) {
+    const a = angle + (i / ARMS) * Math.PI * 2;
+    const bx = CX + Math.cos(a) * R;
+    const by = CY + Math.sin(a) * R;
+
+    // Arm
+    ctx.save();
+    ctx.strokeStyle = s.arm === 'rainbow'
+      ? `hsl(${(i*120 + angle*30)%360},90%,65%)`
+      : s.arm;
+    ctx.lineWidth = 18;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.lineTo(bx, by);
+    ctx.stroke();
+
+    // Ball
+    const ballGrad = ctx.createRadialGradient(bx-r*.3, by-r*.3, r*.1, bx, by, r);
+    const ballCol = s.arm === 'rainbow'
+      ? `hsl(${(i*120+angle*30)%360},90%,75%)`
+      : s.ball;
+    ballGrad.addColorStop(0, '#fff');
+    ballGrad.addColorStop(0.3, ballCol);
+    ballGrad.addColorStop(1, s.arm === 'rainbow'
+      ? `hsl(${(i*120+angle*30)%360},70%,40%)`
+      : s.hub);
+    ctx.fillStyle = ballGrad;
+    ctx.beginPath(); ctx.arc(bx, by, r, 0, Math.PI*2); ctx.fill();
+
+    // Ball shine
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.beginPath(); ctx.arc(bx-r*.25, by-r*.25, r*.35, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  // Center hub
+  const hubGrad = ctx.createRadialGradient(CX-6, CY-6, 2, CX, CY, hubR);
+  hubGrad.addColorStop(0, '#fff');
+  hubGrad.addColorStop(0.4, s.ball);
+  hubGrad.addColorStop(1, s.hub);
+  ctx.fillStyle = hubGrad;
+  ctx.beginPath(); ctx.arc(CX, CY, hubR, 0, Math.PI*2); ctx.fill();
+
+  // Hub shine
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.beginPath(); ctx.arc(CX-6, CY-6, 8, 0, Math.PI*2); ctx.fill();
+}
+
+// Physics loop
+let lastTime = 0, elapsed = 0;
+function loop(ts) {
+  const dt = Math.min((ts - lastTime) / 16.67, 3); // normalized to 60fps
+  lastTime = ts;
+
+  if (velocity > 0.001) {
+    angle    += velocity * dt;
+    velocity *= Math.pow(friction, dt);
+    if (!spinning) { spinning = true; spinStart = Date.now(); }
+    elapsed = (Date.now() - spinStart) / 1000;
+  } else {
+    velocity = 0;
+    if (spinning) { spinning = false; }
+  }
+
+  drawSpinner();
+  updateStats();
+  frameId = requestAnimationFrame(loop);
+}
+
+function updateStats() {
+  const fps = 60;
+  const rps = velocity * fps / (Math.PI * 2);
+  const rpm = Math.round(rps * 60);
+  if (rpm > maxRPM) maxRPM = rpm;
+  const fullSpins = Math.floor(angle / (Math.PI * 2));
+  totalSpins = fullSpins;
+
+  document.getElementById('rpm-val').textContent  = rpm;
+  document.getElementById('spins-val').textContent = totalSpins;
+  document.getElementById('max-val').textContent   = maxRPM;
+  document.getElementById('time-val').textContent  = spinning ? Math.floor(elapsed)+'s' : '0s';
+
+  const pct = Math.min(100, (velocity / 0.3) * 100);
+  const fill = document.getElementById('speed-fill');
+  fill.style.width = pct + '%';
+  fill.style.background = pct > 80 ? '#ef4444' : pct > 50 ? '#f59e0b' : '#10b981';
+
+  const btn = document.getElementById('center-btn');
+  if (spinning) btn.classList.add('spinning'); else btn.classList.remove('spinning');
+}
+
+function clickSpin() {
+  velocity += 0.04 + Math.random() * 0.02;
+  document.getElementById('click-hint').classList.add('hidden');
+  spawnParticle();
+}
+
+function boostSpin() {
+  velocity += 0.15;
+  spawnParticle();
+}
+
+function startSpin(e) {
+  e.preventDefault();
+  clickSpin();
+}
+
+function resetSpinner() {
+  velocity = 0; totalSpins = 0; maxRPM = 0; spinning = false; angle = 0;
+  document.getElementById('click-hint').classList.remove('hidden');
+  drawSpinner();
+  document.getElementById('rpm-val').textContent = '0';
+  document.getElementById('spins-val').textContent = '0';
+  document.getElementById('max-val').textContent = '0';
+  document.getElementById('time-val').textContent = '0s';
+  document.getElementById('speed-fill').style.width = '0%';
+}
+
+function spawnParticle() {
+  const colors = ['#4f8ef7','#10b981','#f59e0b','#ef4444','#8b5cf6'];
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const wrap = document.getElementById('spinner-wrap');
+  const rect = wrap.getBoundingClientRect();
+  p.style.cssText = `width:8px;height:8px;left:${rect.left+rect.width/2+Math.random()*60-30}px;top:${rect.top+rect.height/2+Math.random()*60-30}px;background:${colors[Math.random()*colors.length|0]};`;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 800);
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); clickSpin(); }
+  if (e.code === 'KeyB')  boostSpin();
+});
+
+// Start loop
+requestAnimationFrame(ts => { lastTime = ts; frameId = requestAnimationFrame(loop); });
+drawSpinner();
+</script>
+</body>
+</html>

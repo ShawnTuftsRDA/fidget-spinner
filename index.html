@@ -266,6 +266,7 @@ function loop(ts) {
 
   drawSpinner();
   updateStats();
+  updateSpinnerSound(velocity);
   frameId = requestAnimationFrame(loop);
 }
 
@@ -292,6 +293,7 @@ function updateStats() {
 }
 
 function clickSpin() {
+  initSound();
   velocity += 0.04 + Math.random() * 0.02;
   document.getElementById('click-hint').classList.add('hidden');
   spawnParticle();
@@ -338,6 +340,68 @@ document.addEventListener('keydown', e => {
 // Start loop
 requestAnimationFrame(ts => { lastTime = ts; frameId = requestAnimationFrame(loop); });
 drawSpinner();
+
+// ── SPINNER SOUND ENGINE ────────────────────────────────
+let _audioCtx = null, _whirrGain = null, _whirrOsc = null, _noiseGain = null, _soundOn = false;
+
+function initSound() {
+  if (_audioCtx) return;
+  try {
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Oscillator -- tonal whirr (pitch follows RPM)
+    _whirrOsc  = _audioCtx.createOscillator();
+    _whirrGain = _audioCtx.createGain();
+    _whirrOsc.type = 'sawtooth';
+    _whirrOsc.frequency.setValueAtTime(40, _audioCtx.currentTime);
+    _whirrGain.gain.setValueAtTime(0, _audioCtx.currentTime);
+    _whirrOsc.connect(_whirrGain);
+    _whirrGain.connect(_audioCtx.destination);
+    _whirrOsc.start();
+
+    // Noise layer -- bearing/air friction
+    const bufSize = _audioCtx.sampleRate * 2;
+    const buf  = _audioCtx.createBuffer(1, bufSize, _audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+    const noiseSrc = _audioCtx.createBufferSource();
+    noiseSrc.buffer = buf;
+    noiseSrc.loop = true;
+    const filt   = _audioCtx.createBiquadFilter();
+    _noiseGain   = _audioCtx.createGain();
+    filt.type    = 'highpass';
+    filt.frequency.value = 3000;
+    noiseSrc.connect(filt); filt.connect(_noiseGain); _noiseGain.connect(_audioCtx.destination);
+    _noiseGain.gain.setValueAtTime(0, _audioCtx.currentTime);
+    noiseSrc.start();
+    _soundOn = true;
+  } catch(e) {}
+}
+
+function updateSpinnerSound(vel) {
+  if (!_soundOn || !_audioCtx) return;
+  const now = _audioCtx.currentTime;
+  const fps = 60;
+  const rps = Math.abs(vel) * fps / (Math.PI * 2);
+  const rpm = rps * 60;
+
+  if (rpm < 2) {
+    // Stopped -- silence
+    _whirrGain.gain.linearRampToValueAtTime(0, now + 0.3);
+    _noiseGain.gain.linearRampToValueAtTime(0, now + 0.3);
+    return;
+  }
+
+  // Pitch: 40Hz at low speed, up to 400Hz at high speed
+  const freq = Math.min(400, 40 + rpm * 1.5);
+  _whirrOsc.frequency.linearRampToValueAtTime(freq, now + 0.1);
+
+  // Volume scales with rpm, max out at 0.08 (quiet but audible)
+  const vol = Math.min(0.08, rpm / 500 * 0.08);
+  _whirrGain.gain.linearRampToValueAtTime(vol * 0.7, now + 0.1);
+  _noiseGain.gain.linearRampToValueAtTime(vol * 0.4, now + 0.1);
+}
+// ────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
